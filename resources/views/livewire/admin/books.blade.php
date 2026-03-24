@@ -236,7 +236,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                         <tr class="border-b dark:border-zinc-700 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 transition-colors">
                             <td class="px-6 py-4">
                                 @if($book->cover_image)
-                                    <img src="{{ Storage::url($book->cover_image) }}" class="h-10 w-8 object-cover rounded shadow-sm">
+                                    <img src="{{ Storage::url($book->cover_image) }}" class="h-10 w-8 object-cover rounded shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/400x600/f8f9fa/a3a8ad?text=NO+IMG';">
                                 @else
                                     <div class="h-10 w-8 bg-zinc-100 dark:bg-zinc-800 rounded flex items-center justify-center text-[8px] text-zinc-400">NO IMG</div>
                                 @endif
@@ -280,7 +280,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                                 @if($cover_image_file)
                                     <img src="{{ $cover_image_file->temporaryUrl() }}" class="w-full h-full object-cover rounded">
                                 @elseif($bookId && ($existingBook = \App\Models\Book::find($bookId)) && $existingBook->cover_image)
-                                    <img src="{{ Storage::url($existingBook->cover_image) }}" class="w-full h-full object-cover rounded">
+                                    <img src="{{ Storage::url($existingBook->cover_image) }}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.src='https://placehold.co/400x600/f8f9fa/a3a8ad?text=NO+IMG';">
                                 @else
                                     <div class="text-center">
                                         <flux:icon icon="photo" class="mx-auto size-8 text-zinc-400 mb-2" />
