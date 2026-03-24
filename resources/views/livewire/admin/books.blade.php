@@ -86,6 +86,19 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
         }
     }
 
+    #[Livewire\Attributes\On('triggerPublisherUpdate')]
+    public function triggerPublisherUpdate($val)
+    {
+        if (is_numeric($val)) {
+            $this->publisher_id = $val;
+        } elseif (!empty($val)) {
+            $publisher = Publisher::firstOrCreate(['name' => $val]);
+            $this->publisher_id = $publisher->id;
+        } else {
+            $this->publisher_id = null;
+        }
+    }
+
     #[Livewire\Attributes\On('triggerClassificationUpdate')]
     public function triggerClassificationUpdate($val)
     {
