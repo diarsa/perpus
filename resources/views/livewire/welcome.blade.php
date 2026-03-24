@@ -323,7 +323,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
                             <div class="col" wire:key="book-{{ $book->id }}">
                                 <div class="product-card">
                                     @if($book->cover_image)
-                                        <img src="{{ Storage::url($book->cover_image) }}" class="product-img" alt="{{ $book->title }}" onerror="this.onerror=null; this.src='https://placehold.co/400x600/f8f9fa/a3a8ad?text=Tanpa+Sampul';">
+                                        <img src="{{ Storage::url($book->cover_image) }}" class="product-img" alt="{{ $book->title }}" onerror="this.onerror=null; this.src='/noimg.svg';">
                                     @else
                                         <div class="product-img d-flex flex-column align-items-center justify-content-center p-3 text-center">
                                             <i class="fas fa-book fa-3x text-light mb-2"></i>
@@ -511,7 +511,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
                                     <div class="p-3 d-flex border-bottom">
                                         <div class="me-3" style="width: 80px; height: 100px; background: #f8f8f8;">
                                             @if($borrow->book->cover_image)
-                                                <img src="{{ Storage::url($borrow->book->cover_image) }}" class="w-100 h-100 object-fit-cover shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/400x600/f8f9fa/a3a8ad?text=Tanpa+Sampul';">
+                                                <img src="{{ Storage::url($borrow->book->cover_image) }}" class="w-100 h-100 object-fit-cover shadow-sm" onerror="this.onerror=null; this.src='/noimg.svg';">
                                             @else
                                                 <div class="d-flex align-items-center justify-content-center h-100 text-light"><i class="fas fa-book fa-2x"></i></div>
                                             @endif
@@ -570,7 +570,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
                         <div class="d-flex mb-4 p-3 bg-light border rounded-1">
                             <div class="me-3" style="width: 60px; height: 80px; background: #eee; flex-shrink: 0;">
                                 @if($selectedBookItem->cover_image)
-                                    <img src="{{ Storage::url($selectedBookItem->cover_image) }}" class="w-100 h-100 object-fit-cover shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/400x600/f8f9fa/a3a8ad?text=Tanpa+Sampul';">
+                                    <img src="{{ Storage::url($selectedBookItem->cover_image) }}" class="w-100 h-100 object-fit-cover shadow-sm" onerror="this.onerror=null; this.src='/noimg.svg';">
                                 @else
                                     <div class="d-flex align-items-center justify-content-center h-100 text-light"><i class="fas fa-book"></i></div>
                                 @endif
