@@ -292,17 +292,19 @@ new #[Layout('components.layouts.guest')] class extends Component {
         @if($activeTab == 'home')
             <!-- HOME TAB (Product Grid) -->
             <div class="row g-4">
+                @if(empty($search))
                 <!-- Sidebar / Banner area -->
                 <div class="col-12">
                     <div class="promo-banner d-flex align-items-center justify-content-between overflow-hidden mb-0">
                         <div class="p-2">
                             <h3 class="fw-bold shopee-text-orange mb-2">Ajukan Peminjaman Buku Semudah Belanja Online!</h3>
                             <p class="text-muted">Proses pengajuan peminjaman kini lebih mudah dan cepat.</p>
-                            <button class="btn shopee-orange px-4 py-2" wire:click="$set('search', '')">Pinjam Sekarang</button>
+                            {{-- <button class="btn shopee-orange px-4 py-2" wire:click="$set('search', '')">Pinjam Sekarang</button> --}}
                         </div>
                         <i class="fas fa-book-reader fa-8x opacity-10 d-none d-md-block"></i>
                     </div>
                 </div>
+                @endif
 
                 <!-- Products -->
                 <div class="col-12">
@@ -539,7 +541,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
                                             @if($borrow->status == 'rejected')
                                                 <small class="text-danger italic">Alasan: {{ $borrow->rejection_reason }}</small>
                                             @endif
-                                            <button class="btn btn-sm btn-outline-secondary px-3 ms-2">Chat Petugas</button>
+                                            {{-- <button class="btn btn-sm btn-outline-secondary px-3 ms-2">Chat Petugas</button> --}}
                                         </div>
                                     </div>
                                 </div>
