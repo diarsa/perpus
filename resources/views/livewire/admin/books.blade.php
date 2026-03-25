@@ -298,23 +298,29 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                             <!-- Penulis -->
                             <div style="position: relative; z-index: 999;">
                                 <div wire:ignore x-data="{
+                                        select: null,
                                         init() {
-                                            $(this.$refs.select).select2({
+                                            this.select = $(this.$refs.select);
+                                            this.select.select2({
                                                 tags: true,
                                                 placeholder: 'Pilih Penulis...',
-                                                dropdownParent: $(this.$refs.select).parent(),
+                                                dropdownParent: this.select.parent(),
                                                 width: '100%'
                                             }).on('change', (e) => {
-                                                $wire.dispatch('triggerAuthorUpdate', { val: $(this.$refs.select).val() });
+                                                $wire.dispatch('triggerAuthorUpdate', { val: this.select.val() });
                                             });
 
-                                            Livewire.on('init-select2', (params) => {
-                                                if (params && params.length > 0 && params[0].author_id) {
-                                                    $(this.$refs.select).val(params[0].author_id).trigger('change.select2');
-                                                } else {
-                                                    $(this.$refs.select).val('').trigger('change.select2');
+                                            // Sync Select2 when Livewire author_id changes
+                                            this.$watch('$wire.author_id', (value) => {
+                                                if (this.select.val() != value) {
+                                                    this.select.val(value).trigger('change.select2');
                                                 }
                                             });
+
+                                            // Set initial value immediately
+                                            if ($wire.author_id) {
+                                                this.select.val($wire.author_id).trigger('change.select2');
+                                            }
                                         }
                                     }" 
                                     class="flex flex-col gap-1 relative">
@@ -331,23 +337,29 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                             <!-- Penerbit -->
                             <div style="position: relative; z-index: 998;">
                                 <div wire:ignore x-data="{
+                                        select: null,
                                         init() {
-                                            $(this.$refs.select).select2({
+                                            this.select = $(this.$refs.select);
+                                            this.select.select2({
                                                 tags: true,
                                                 placeholder: 'Pilih Penerbit...',
-                                                dropdownParent: $(this.$refs.select).parent(),
+                                                dropdownParent: this.select.parent(),
                                                 width: '100%'
                                             }).on('change', (e) => {
-                                                $wire.dispatch('triggerPublisherUpdate', { val: $(this.$refs.select).val() });
+                                                $wire.dispatch('triggerPublisherUpdate', { val: this.select.val() });
                                             });
 
-                                            Livewire.on('init-select2', (params) => {
-                                                if (params && params.length > 0 && params[0].publisher_id) {
-                                                    $(this.$refs.select).val(params[0].publisher_id).trigger('change.select2');
-                                                } else {
-                                                    $(this.$refs.select).val('').trigger('change.select2');
+                                            // Sync Select2 when Livewire publisher_id changes
+                                            this.$watch('$wire.publisher_id', (value) => {
+                                                if (this.select.val() != value) {
+                                                    this.select.val(value).trigger('change.select2');
                                                 }
                                             });
+
+                                            // Set initial value immediately
+                                            if ($wire.publisher_id) {
+                                                this.select.val($wire.publisher_id).trigger('change.select2');
+                                            }
                                         }
                                     }" 
                                     class="flex flex-col gap-1 relative">
@@ -366,23 +378,29 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                     <!-- Klasifikasi & (Tahun/Stok) -->
                     <div class="grid grid-cols-2 gap-6" style="position: relative; z-index: 997;">
                         <div wire:ignore x-data="{
+                                select: null,
                                 init() {
-                                    $(this.$refs.select).select2({
+                                    this.select = $(this.$refs.select);
+                                    this.select.select2({
                                         tags: true,
                                         placeholder: 'Pilih Klasifikasi...',
-                                        dropdownParent: $(this.$refs.select).parent(),
+                                        dropdownParent: this.select.parent(),
                                         width: '100%'
                                     }).on('change', (e) => {
-                                        $wire.dispatch('triggerClassificationUpdate', { val: $(this.$refs.select).val() });
+                                        $wire.dispatch('triggerClassificationUpdate', { val: this.select.val() });
                                     });
 
-                                    Livewire.on('init-select2', (params) => {
-                                        if (params && params.length > 0 && params[0].classification_id) {
-                                            $(this.$refs.select).val(params[0].classification_id).trigger('change.select2');
-                                        } else {
-                                            $(this.$refs.select).val('').trigger('change.select2');
+                                    // Sync Select2 when Livewire classification_id changes
+                                    this.$watch('$wire.classification_id', (value) => {
+                                        if (this.select.val() != value) {
+                                            this.select.val(value).trigger('change.select2');
                                         }
                                     });
+
+                                    // Set initial value immediately
+                                    if ($wire.classification_id) {
+                                        this.select.val($wire.classification_id).trigger('change.select2');
+                                    }
                                 }
                             }" 
                             class="flex flex-col gap-1 relative">

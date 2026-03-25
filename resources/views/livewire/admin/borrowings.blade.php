@@ -195,7 +195,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
         <div class="flex gap-4 mb-4">
             <flux:input wire:model.live.debounce.300ms="search" autocomplete="off" placeholder="Cari nama siswa atau judul buku..." icon="magnifying-glass" class="w-full md:w-1/3" />
             
-            <flux:select wire:model.live="statusFilter" class="w-full md:w-1/4" placeholder="Semua Status">
+            <flux:select wire:model.live="statusFilter" class="w-full md:w-1/3" placeholder="Semua Status">
                 <flux:select.option value="">Semua Status</flux:select.option>
                 <flux:select.option value="pending">Menunggu Verifikasi</flux:select.option>
                 <flux:select.option value="borrowed">Sedang Dipinjam</flux:select.option>
