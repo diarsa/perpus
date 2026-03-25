@@ -167,14 +167,14 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
 
         $this->isModalOpen = false;
         $this->resetFields();
-        $this->dispatch('showToast', 'Berhasil', 'Data buku berhasil disimpan.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data buku berhasil disimpan.');
     }
 
     #[Livewire\Attributes\On('deleteBook')]
     public function delete($id)
     {
         Book::find($id)->delete();
-        $this->dispatch('showToast', 'Berhasil', 'Data buku berhasil dihapus.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data buku berhasil dihapus.');
     }
 
     public function resetFields()
@@ -454,17 +454,4 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                 </form>
             </div>
         </flux:modal>
-        <!-- Select2 Initialization -->
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        
-        <style>
-            .select2-container { z-index: 99999 !important; width: 100% !important; }
-            .select2-dropdown { z-index: 100000 !important; }
-        </style>
-        
-        <script>
-            // Clean up scripts, no auto-close needed with correct layering
-        </script>
     </div>

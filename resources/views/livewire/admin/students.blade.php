@@ -71,14 +71,14 @@ new #[Layout('components.layouts.app')] #[Title('Data Siswa')] class extends Com
 
         $this->isModalOpen = false;
         $this->reset(['nis', 'name', 'class', 'gender', 'phone', 'address', 'studentId']);
-        $this->dispatch('showToast', 'Berhasil', 'Data siswa berhasil disimpan.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data siswa berhasil disimpan.');
     }
 
     #[Livewire\Attributes\On('deleteStudent')]
     public function delete($id)
     {
         Student::find($id)->delete();
-        $this->dispatch('showToast', 'Berhasil', 'Data siswa berhasil dihapus.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data siswa berhasil dihapus.');
     }
 
     public function with()

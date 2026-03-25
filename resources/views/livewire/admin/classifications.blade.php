@@ -57,14 +57,14 @@ new #[Layout('components.layouts.app')] #[Title('Data Klasifikasi')] class exten
         $this->reset(['name', 'code', 'classificationId']);
 
         $message = $this->classificationId ? 'Data klasifikasi berhasil diperbarui.' : 'Data klasifikasi berhasil ditambahkan.';
-        $this->dispatch('showToast', 'Berhasil', $message);
+        $this->dispatch('showToast', 'success', 'Berhasil', $message);
     }
 
     #[Livewire\Attributes\On('deleteClassification')]
     public function delete($id)
     {
         Classification::find($id)->delete();
-        $this->dispatch('showToast', 'Berhasil', 'Data klasifikasi berhasil dihapus.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data klasifikasi berhasil dihapus.');
     }
 
     public function with()

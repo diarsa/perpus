@@ -55,14 +55,14 @@ new #[Layout('components.layouts.app')] #[Title('Data Penulis')] class extends C
 
         $this->isModalOpen = false;
         $this->reset(['name', 'biography', 'authorId']);
-        $this->dispatch('showToast', 'Berhasil', 'Data penulis berhasil disimpan.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data penulis berhasil disimpan.');
     }
 
     #[Livewire\Attributes\On('deleteAuthor')]
     public function delete($id)
     {
         Author::find($id)->delete();
-        $this->dispatch('showToast', 'Berhasil', 'Data penulis berhasil dihapus.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data penulis berhasil dihapus.');
     }
 
     public function with()

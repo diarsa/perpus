@@ -10,11 +10,11 @@ new class extends Component {
 
     protected $listeners = ['showToast' => 'show'];
 
-    public function show($title, $message, $type = 'success')
+    public function show($type = 'success', $title = 'Notifikasi', $message = '')
     {
+        $this->type = $type;
         $this->title = $title;
         $this->message = $message;
-        $this->type = $type;
         $this->isOpen = true;
     }
 
@@ -44,24 +44,38 @@ new class extends Component {
     x-transition:leave-end="opacity-0 -translate-y-4"
     style="position:fixed !important; top:24px !important; right:24px !important; z-index:999999; width:320px;"
 >
-    <div class="flex items-start gap-3 rounded-xl shadow-2xl px-4 py-4 border
-        {{ $type === 'success' ? 'bg-green-600 border-green-500 text-white' : 'bg-red-600 border-red-500 text-white' }}">
+    <div class="flex items-start gap-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] px-5 py-4 border-l-4 backdrop-blur-md transition-all duration-500
+        {{ $type === 'success' ? 'bg-white/90 dark:bg-zinc-900/90 border-green-500 text-zinc-800 dark:text-zinc-100' : '' }}
+        {{ $type === 'error' ? 'bg-white/90 dark:bg-zinc-900/90 border-red-500 text-zinc-800 dark:text-zinc-100' : '' }}
+        {{ $type === 'warning' ? 'bg-white/90 dark:bg-zinc-900/90 border-amber-500 text-zinc-800 dark:text-zinc-100' : '' }}
+        {{ $type === 'info' ? 'bg-white/90 dark:bg-zinc-900/90 border-blue-500 text-zinc-800 dark:text-zinc-100' : '' }}">
+        
         <div class="mt-0.5 flex-shrink-0">
             @if($type === 'success')
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
+                <div class="bg-green-100 dark:bg-green-900/30 p-2 rounded-xl text-green-600 dark:text-green-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                </div>
+            @elseif($type === 'error')
+                <div class="bg-red-100 dark:bg-red-900/30 p-2 rounded-xl text-red-600 dark:text-red-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+            @elseif($type === 'warning')
+                <div class="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-xl text-amber-600 dark:text-amber-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
             @else
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
+                <div class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-xl text-blue-600 dark:text-blue-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
             @endif
         </div>
-        <div class="flex-1 min-w-0">
-            <p class="font-semibold text-sm">{{ $title }}</p>
-            <p class="text-xs mt-0.5 opacity-90">{{ $message }}</p>
+
+        <div class="flex-1 min-w-0 pr-2">
+            <p class="font-bold text-sm tracking-tight capitalize">{{ $title }}</p>
+            <p class="text-[13px] mt-1 text-zinc-500 dark:text-zinc-400 leading-snug">{{ $message }}</p>
         </div>
-        <button @click="open = false" class="flex-shrink-0 ml-1 opacity-75 hover:opacity-100 transition">
+
+        <button @click="open = false" class="flex-shrink-0 -mt-1 -mr-1 p-1 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>

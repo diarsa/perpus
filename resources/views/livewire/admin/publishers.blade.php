@@ -55,14 +55,14 @@ new #[Layout('components.layouts.app')] #[Title('Data Penerbit')] class extends 
 
         $this->isModalOpen = false;
         $this->reset(['name', 'address', 'publisherId']);
-        $this->dispatch('showToast', 'Berhasil', 'Data penerbit berhasil disimpan.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data penerbit berhasil disimpan.');
     }
 
     #[Livewire\Attributes\On('deletePublisher')]
     public function delete($id)
     {
         Publisher::find($id)->delete();
-        $this->dispatch('showToast', 'Berhasil', 'Data penerbit berhasil dihapus.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data penerbit berhasil dihapus.');
     }
 
     public function with()

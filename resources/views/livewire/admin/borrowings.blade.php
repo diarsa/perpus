@@ -72,14 +72,14 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
 
         // Check stock again
         if ($borrowing->book->available_stock < 1) {
-            $this->dispatch('showToast', 'Gagal', 'Stok buku habis. Tidak bisa menyetujui.');
+            $this->dispatch('showToast', 'error', 'Gagal', 'Stok buku habis. Tidak bisa menyetujui.');
             return;
         }
 
         $borrowing->update(['status' => 'borrowed']);
         $borrowing->book->decrement('available_stock');
 
-        $this->dispatch('showToast', 'Berhasil', 'Peminjaman disetujui.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Peminjaman disetujui.');
     }
 
     public function openRejectModal($id)
@@ -100,7 +100,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
         ]);
 
         $this->isRejectModalOpen = false;
-        $this->dispatch('showToast', 'Berhasil', 'Peminjaman ditolak.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Peminjaman ditolak.');
     }
 
     #[Livewire\Attributes\On('setBorrowingStudent')]
@@ -138,7 +138,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
 
         $this->isModalOpen = false;
         $this->reset(['student_id', 'book_id', 'borrow_date', 'return_date']);
-        $this->dispatch('showToast', 'Berhasil', 'Data peminjaman berhasil disimpan.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Data peminjaman berhasil disimpan.');
     }
 
     public function openReturnModal($id)
@@ -168,7 +168,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
         
         $this->isReturnModalOpen = false;
         $this->reset(['borrowingId', 'fineAmount']);
-        $this->dispatch('showToast', 'Berhasil', 'Pengembalian buku berhasil diproses.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Pengembalian buku berhasil diproses.');
     }
 
     #[Livewire\Attributes\On('deleteBorrowing')]
@@ -179,7 +179,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
             $b->book->increment('available_stock');
         }
         $b->delete();
-        $this->dispatch('showToast', 'Berhasil', 'Riwayat peminjaman berhasil dihapus.');
+        $this->dispatch('showToast', 'success', 'Berhasil', 'Riwayat peminjaman berhasil dihapus.');
     }
 
     public function with()
@@ -254,13 +254,16 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                                 <span class="text-zinc-800 dark:text-zinc-200 line-clamp-1">{{ $borrow->book->title }}</span>
                             </td>
                             <td class="px-6 py-4 text-center text-xs text-zinc-600 dark:text-zinc-400 font-bold uppercase">{{ $borrow->borrow_date->format('d M Y') }}</td>
-                            <td class="px-6 py-4 text-center text-xs text-zinc-600 dark:text-zinc-400">
+                            <td class="px-6 py-4 text-center leading-tight">
                                 @if($borrow->status == 'rejected')
-                                    <span class="text-red-500 italic">{{ Str::limit($borrow->rejection_reason, 30) }}</span>
+                                    <span class="text-[10px] text-red-500 italic block mb-1 uppercase font-bold tracking-tight">Ditolak</span>
+                                    <span class="text-xs text-zinc-500">{{ Str::limit($borrow->rejection_reason, 30) }}</span>
                                 @else
-                                    {{ $borrow->return_date->format('d M Y') }}
+                                    <div class="text-zinc-800 dark:text-zinc-200 font-medium text-xs">{{ $borrow->return_date->format('d M Y') }}</div>
+                                    <div class="text-[10px] text-zinc-400 dark:text-zinc-500 mt-0.5">{{ $borrow->return_date->diffForHumans() }}</div>
+                                    
                                     @if($borrow->status == 'borrowed' && now()->startOfDay()->greaterThan($borrow->return_date))
-                                        <br><span class="text-[10px] text-red-500 font-black uppercase">Terlambat!</span>
+                                        <div class="mt-1"><span class="text-[9px] bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded-full font-black uppercase tracking-tighter">Terlambat!</span></div>
                                     @endif
                                 @endif
                             </td>
@@ -430,14 +433,4 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                 </div>
             </div>
         </flux:modal>
-
-        <!-- Select2 Initialization -->
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        
-        <style>
-            .select2-container { z-index: 99999 !important; width: 100% !important; }
-            .select2-dropdown { z-index: 100000 !important; }
-        </style>
-</div>
+@endvolt
