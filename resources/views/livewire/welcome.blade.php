@@ -171,7 +171,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
     }
 }; ?>
 
-<div>
+<div x-data="{ showModal: @entangle('showBorrowModal') }">
     <style>
         .page-loading {
             opacity: 0.5;
@@ -198,6 +198,26 @@ new #[Layout('components.layouts.guest')] class extends Component {
         .product-author i, .product-publisher i {
             font-size: 10px;
             opacity: 0.7;
+        }
+        
+        /* High-Reliability Modal Transitions */
+        .modal-blur-backdrop {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-blur-backdrop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-floating-dialog {
+            transform: translateY(40px) scale(0.95);
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-floating-dialog.show {
+            transform: translateY(0) scale(1);
+            opacity: 1;
         }
     </style>
     <!-- Shopee-style Toast Notification -->
@@ -576,31 +596,21 @@ new #[Layout('components.layouts.guest')] class extends Component {
     </main>
 
 
-    <!-- Borrow Confirmation Modal - Ultra Smooth Cinematic Version -->
+    <!-- Borrow Confirmation Modal - Maximum Reliability Architecture -->
     <div 
-        x-data="{ open: @entangle('showBorrowModal') }" 
-        x-show="open" 
-        x-on:keydown.escape.window="open = false"
-        x-transition:enter="transition ease-in-out duration-1200"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in-out duration-600"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
+        x-show="showModal" 
+        wire:ignore.self
+        x-on:keydown.escape.window="showModal = false"
+        class="modal-blur-backdrop"
+        :class="showModal ? 'show' : ''"
         style="position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 9999; background: rgba(0,0,0,0.6); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: center; padding: 1rem;"
         x-cloak
     >
         <!-- Modal Dialog -->
         <div 
-            x-show="open"
-            x-transition:enter="transition transform ease-out duration-1200"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-24"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            x-transition:leave="transition transform ease-in duration-600"
-            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-            x-transition:leave-end="opacity-0 scale-95 translate-y-24"
-            @click.away="open = false"
-            class="bg-white shadow-2xl overflow-hidden"
+            class="modal-floating-dialog bg-white shadow-2xl overflow-hidden"
+            :class="showModal ? 'show' : ''"
+            @click.away="showModal = false"
             style="position: relative; z-index: 10000; width: 95%; max-width: 480px; border-radius: 28px; margin: auto;"
         >
             @if($selectedBookItem)
