@@ -23,7 +23,21 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
 
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName);
+        if (in_array($propertyName, ['search', 'statusFilter'])) {
+            $this->resetPage();
+        }
+
+        try {
+            $this->validateOnly($propertyName);
+        } catch (\Exception $e) {
+            // Silently ignore if property is not in rules
+        }
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'statusFilter']);
+        $this->resetPage();
     }
 
     public $isModalOpen = false;
@@ -211,7 +225,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
             </flux:select>
 
             @if($search || $statusFilter)
-                <flux:button variant="ghost" size="sm" wire:click="$set('search', ''); $set('statusFilter', '');" icon="x-mark">
+                <flux:button variant="ghost" size="sm" wire:click="clearFilters" icon="x-mark">
                     Hapus Filter
                 </flux:button>
             @endif
@@ -224,7 +238,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                         <th class="px-6 py-3">Siswa</th>
                         <th class="px-6 py-3">Buku</th>
                         <th class="px-6 py-3 text-center">Tanggal Pinjam</th>
-                        <th class="px-6 py-3 text-center text-zinc-500 italic">Batas Kembali / Alasan</th>
+                        <th class="px-6 py-3 text-center">Batas Kembali / Alasan</th>
                         <th class="px-6 py-3 text-center">Status</th>
                         <th class="px-6 py-3 text-right">Aksi</th>
                     </tr>
@@ -300,7 +314,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
 
         <flux:modal wire:model="isModalOpen" class="w-full max-w-lg">
             <div class="p-6" id="borrowingModalBody">
-                <h2 class="text-xl font-bold mb-6 italic uppercase tracking-tight">Peminjaman Buku Baru</h2>
+                <h2 class="text-xl font-bold mb-6 uppercase tracking-tight">Peminjaman Buku Baru</h2>
                 <form wire:submit="save" class="space-y-6">
                     <flux:field>
                         <div x-data="{ 
@@ -388,7 +402,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
 
         <flux:modal wire:model="isReturnModalOpen" class="w-full max-w-sm">
             <div class="p-6">
-                <h2 class="text-xl font-black italic uppercase mb-2">Konfirmasi Kembali</h2>
+                <h2 class="text-xl font-black uppercase mb-2">Konfirmasi Kembali</h2>
                 <div class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl mb-6">
                     <p class="text-sm text-zinc-500 dark:text-zinc-400">Total Denda:</p>
                     <p class="text-2xl font-black text-red-600">Rp {{ number_format($fineAmount) }}</p>
@@ -408,7 +422,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                 <div class="size-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </div>
-                <h3 class="text-xl font-black uppercase italic mb-4">Tolak Peminjaman</h3>
+                <h3 class="text-xl font-black uppercase mb-4">Tolak Peminjaman</h3>
                 <flux:textarea wire:model="rejectionReason" label="Alasan Penolakan" placeholder="Contoh: Belum mengembalikan buku sebelumnya, atau data NIS tidak valid." rows="3" required />
                 <div class="flex justify-end gap-3 mt-8">
                     <flux:button variant="ghost" wire:click="$set('isRejectModalOpen', false)">Batal</flux:button>

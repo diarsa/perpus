@@ -303,27 +303,32 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                                 <div wire:ignore x-data="{
                                         select: null,
                                         init() {
-                                            this.select = $(this.$refs.select);
-                                            this.select.select2({
-                                                tags: true,
-                                                placeholder: 'Pilih Penulis...',
-                                                dropdownParent: this.select.parent(),
-                                                width: '100%'
-                                            }).on('change', (e) => {
-                                                $wire.dispatch('triggerAuthorUpdate', { val: this.select.val() });
-                                            });
+                                            let check = setInterval(() => {
+                                                if (window.$ && window.$.fn.select2) {
+                                                    clearInterval(check);
+                                                    this.select = $(this.$refs.select);
+                                                    this.select.select2({
+                                                        tags: true,
+                                                        placeholder: 'Pilih Penulis...',
+                                                        dropdownParent: this.select.parent(),
+                                                        width: '100%'
+                                                    }).on('change', (e) => {
+                                                        $wire.dispatch('triggerAuthorUpdate', { val: this.select.val() });
+                                                    });
 
-                                            // Sync Select2 when Livewire author_id changes
-                                            this.$watch('$wire.author_id', (value) => {
-                                                if (this.select.val() != value) {
-                                                    this.select.val(value).trigger('change.select2');
+                                                    // Sync Select2 when Livewire author_id changes
+                                                    this.$watch('$wire.author_id', (value) => {
+                                                        if (this.select.val() != value) {
+                                                            this.select.val(value).trigger('change.select2');
+                                                        }
+                                                    });
+
+                                                    // Set initial value immediately
+                                                    if ($wire.author_id) {
+                                                        this.select.val($wire.author_id).trigger('change.select2');
+                                                    }
                                                 }
-                                            });
-
-                                            // Set initial value immediately
-                                            if ($wire.author_id) {
-                                                this.select.val($wire.author_id).trigger('change.select2');
-                                            }
+                                            }, 50);
                                         }
                                     }" 
                                     class="flex flex-col gap-1 relative">
@@ -342,27 +347,32 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                                 <div wire:ignore x-data="{
                                         select: null,
                                         init() {
-                                            this.select = $(this.$refs.select);
-                                            this.select.select2({
-                                                tags: true,
-                                                placeholder: 'Pilih Penerbit...',
-                                                dropdownParent: this.select.parent(),
-                                                width: '100%'
-                                            }).on('change', (e) => {
-                                                $wire.dispatch('triggerPublisherUpdate', { val: this.select.val() });
-                                            });
+                                            let check = setInterval(() => {
+                                                if (window.$ && window.$.fn.select2) {
+                                                    clearInterval(check);
+                                                    this.select = $(this.$refs.select);
+                                                    this.select.select2({
+                                                        tags: true,
+                                                        placeholder: 'Pilih Penerbit...',
+                                                        dropdownParent: this.select.parent(),
+                                                        width: '100%'
+                                                    }).on('change', (e) => {
+                                                        $wire.dispatch('triggerPublisherUpdate', { val: this.select.val() });
+                                                    });
 
-                                            // Sync Select2 when Livewire publisher_id changes
-                                            this.$watch('$wire.publisher_id', (value) => {
-                                                if (this.select.val() != value) {
-                                                    this.select.val(value).trigger('change.select2');
+                                                    // Sync Select2 when Livewire publisher_id changes
+                                                    this.$watch('$wire.publisher_id', (value) => {
+                                                        if (this.select.val() != value) {
+                                                            this.select.val(value).trigger('change.select2');
+                                                        }
+                                                    });
+
+                                                    // Set initial value immediately
+                                                    if ($wire.publisher_id) {
+                                                        this.select.val($wire.publisher_id).trigger('change.select2');
+                                                    }
                                                 }
-                                            });
-
-                                            // Set initial value immediately
-                                            if ($wire.publisher_id) {
-                                                this.select.val($wire.publisher_id).trigger('change.select2');
-                                            }
+                                            }, 50);
                                         }
                                     }" 
                                     class="flex flex-col gap-1 relative">
@@ -383,27 +393,32 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                         <div wire:ignore x-data="{
                                 select: null,
                                 init() {
-                                    this.select = $(this.$refs.select);
-                                    this.select.select2({
-                                        tags: true,
-                                        placeholder: 'Pilih Klasifikasi...',
-                                        dropdownParent: this.select.parent(),
-                                        width: '100%'
-                                    }).on('change', (e) => {
-                                        $wire.dispatch('triggerClassificationUpdate', { val: this.select.val() });
-                                    });
+                                    let check = setInterval(() => {
+                                        if (window.$ && window.$.fn.select2) {
+                                            clearInterval(check);
+                                            this.select = $(this.$refs.select);
+                                            this.select.select2({
+                                                tags: true,
+                                                placeholder: 'Pilih Klasifikasi...',
+                                                dropdownParent: this.select.parent(),
+                                                width: '100%'
+                                            }).on('change', (e) => {
+                                                $wire.dispatch('triggerClassificationUpdate', { val: this.select.val() });
+                                            });
 
-                                    // Sync Select2 when Livewire classification_id changes
-                                    this.$watch('$wire.classification_id', (value) => {
-                                        if (this.select.val() != value) {
-                                            this.select.val(value).trigger('change.select2');
+                                            // Sync Select2 when Livewire classification_id changes
+                                            this.$watch('$wire.classification_id', (value) => {
+                                                if (this.select.val() != value) {
+                                                    this.select.val(value).trigger('change.select2');
+                                                }
+                                            });
+
+                                            // Set initial value immediately
+                                            if ($wire.classification_id) {
+                                                this.select.val($wire.classification_id).trigger('change.select2');
+                                            }
                                         }
-                                    });
-
-                                    // Set initial value immediately
-                                    if ($wire.classification_id) {
-                                        this.select.val($wire.classification_id).trigger('change.select2');
-                                    }
+                                    }, 50);
                                 }
                             }" 
                             class="flex flex-col gap-1 relative">

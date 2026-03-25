@@ -12,16 +12,20 @@ Volt::route('dashboard', 'admin.dashboard')
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+    Route::prefix('settings')->group(function () {  
+        Volt::route('profile', 'settings.profile')->name('settings.profile');
+        Volt::route('password', 'settings.password')->name('settings.password');
+        Volt::route('appearance', 'settings.appearance')->name('settings.appearance');
+    });
 
-    Volt::route('admin/books', 'admin.books')->name('admin.books');
-    Volt::route('admin/authors', 'admin.authors')->name('admin.authors');
-    Volt::route('admin/publishers', 'admin.publishers')->name('admin.publishers');
-    Volt::route('admin/classifications', 'admin.classifications')->name('admin.classifications');
-    Volt::route('admin/students', 'admin.students')->name('admin.students');
-    Volt::route('admin/borrowings', 'admin.borrowings')->name('admin.borrowings');
+    Route::prefix('admin')->group(function () {
+        Volt::route('books', 'admin.books')->name('admin.books');
+        Volt::route('authors', 'admin.authors')->name('admin.authors');
+        Volt::route('publishers', 'admin.publishers')->name('admin.publishers');
+        Volt::route('classifications', 'admin.classifications')->name('admin.classifications');
+        Volt::route('students', 'admin.students')->name('admin.students');
+        Volt::route('borrowings', 'admin.borrowings')->name('admin.borrowings');
+    });
 });
 
 require __DIR__.'/auth.php';
