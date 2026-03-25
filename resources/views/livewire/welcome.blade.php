@@ -616,7 +616,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
             @if($selectedBookItem)
                 <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light">
                     <h6 class="fw-bold shopee-text-orange mb-0 uppercase tracking-tight">Konfirmasi Peminjaman</h6>
-                    <button type="button" class="btn-close shadow-none" @click="open = false" style="font-size: 10px;"></button>
+                    <button type="button" class="btn-close shadow-none" @click="showModal = false" style="font-size: 10px;"></button>
                 </div>
                 <div class="p-4">
                     <div class="d-flex mb-4 p-3 bg-white border rounded-3 align-items-center shadow-sm">
@@ -648,7 +648,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
 
                     <div class="row g-2 pt-2">
                         <div class="col-6">
-                            <button type="button" class="btn btn-light w-100 fw-bold small text-muted py-3 border-0" @click="open = false">BATAL</button>
+                            <button type="button" class="btn btn-light w-100 fw-bold small text-muted py-3 border-0" @click="showModal = false">BATAL</button>
                         </div>
                         <div class="col-6">
                             <button type="button" class="btn btn-shopee w-100 fw-bold small py-3 px-0 d-flex align-items-center justify-content-center gap-2 shadow" style="background: linear-gradient(45deg, #ee4d2d, #ff6633); border: none;" wire:click="confirmBorrow">
