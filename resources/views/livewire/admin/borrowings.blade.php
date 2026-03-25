@@ -19,6 +19,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
     public $return_date = '';
     public $borrowingId = null;
     public $rejectionReason = '';
+    public $statusFilter = '';
 
     public $isModalOpen = false;
     public $isReturnModalOpen = false;
@@ -175,6 +176,9 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                             });
                         })
                         ->latest()
+                        ->when($this->statusFilter, function($q) {
+                            $q->where('status', $this->statusFilter);
+                        })
                         ->paginate(10),
             'students' => Student::orderBy('name')->get(),
             'available_books' => Book::where('available_stock', '>', 0)->orderBy('title')->get(),
@@ -188,8 +192,23 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
             <flux:button variant="primary" wire:click="create">Peminjaman Baru</flux:button>
         </div>
 
-        <div class="flex mb-4">
+        <div class="flex gap-4 mb-4">
             <flux:input wire:model.live.debounce.300ms="search" autocomplete="off" placeholder="Cari nama siswa atau judul buku..." icon="magnifying-glass" class="w-full md:w-1/3" />
+            
+            <flux:select wire:model.live="statusFilter" class="w-full md:w-1/4" placeholder="Semua Status">
+                <flux:select.option value="">Semua Status</flux:select.option>
+                <flux:select.option value="pending">Menunggu Verifikasi</flux:select.option>
+                <flux:select.option value="borrowed">Sedang Dipinjam</flux:select.option>
+                <flux:select.option value="returning">Proses Pengembalian</flux:select.option>
+                <flux:select.option value="returned">Sudah Dikembalikan</flux:select.option>
+                <flux:select.option value="rejected">Ditolak / Dibatalkan</flux:select.option>
+            </flux:select>
+
+            @if($search || $statusFilter)
+                <flux:button variant="ghost" size="sm" wire:click="$set('search', ''); $set('statusFilter', '');" icon="x-mark">
+                    Hapus Filter
+                </flux:button>
+            @endif
         </div>
 
         <div class="bg-white dark:bg-zinc-900 shadow rounded-lg overflow-hidden">
