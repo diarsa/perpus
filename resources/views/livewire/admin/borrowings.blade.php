@@ -21,6 +21,11 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
     public $rejectionReason = '';
     public $statusFilter = '';
 
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
     public $isModalOpen = false;
     public $isReturnModalOpen = false;
     public $isRejectModalOpen = false;
@@ -39,6 +44,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
     public function create()
     {
         $this->reset(['student_id', 'book_id', 'borrow_date', 'return_date', 'borrowingId']);
+        $this->resetValidation();
         $this->borrow_date = date('Y-m-d');
         $this->return_date = date('Y-m-d', strtotime('+7 days'));
         $this->isModalOpen = true;
@@ -296,57 +302,80 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
             <div class="p-6" id="borrowingModalBody">
                 <h2 class="text-xl font-bold mb-6 italic uppercase tracking-tight">Peminjaman Buku Baru</h2>
                 <form wire:submit="save" class="space-y-6">
-                    <div x-data="{ 
-                        studentId: @entangle('student_id'),
-                        init() {
-                            let check = setInterval(() => {
-                                if (window.$ && window.$.fn.select2) {
-                                    clearInterval(check);
-                                    $(this.$refs.studentSelect).select2({ width: '100%', dropdownParent: $('#borrowingModalBody') })
-                                        .on('change', (e) => { this.studentId = e.target.value; @this.setBorrowingStudent(e.target.value); });
-                                    $wire.on('borrowing-modal-opened', () => {
-                                        $(this.$refs.studentSelect).val(null).trigger('change');
-                                    });
-                                }
-                            }, 50);
-                        }
-                    }" wire:ignore>
-                        <flux:label>Siswa Peminjam</flux:label>
-                        <select x-ref="studentSelect" class="w-full rounded-md border-zinc-200">
-                            <option value="">Pilih Siswa...</option>
-                            @foreach($students as $s)
-                                <option value="{{ $s->id }}">{{ $s->nis }} - {{ $s->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <flux:field>
+                        <div x-data="{ 
+                            studentId: @entangle('student_id'),
+                            init() {
+                                let check = setInterval(() => {
+                                    if (window.$ && window.$.fn.select2) {
+                                        clearInterval(check);
+                                        $(this.$refs.studentSelect).select2({ width: '100%', dropdownParent: $('#borrowingModalBody') })
+                                            .on('change', (e, data) => { 
+                                                if (data && data.ignore) return;
+                                                this.studentId = e.target.value; 
+                                                @this.setBorrowingStudent(e.target.value); 
+                                            });
+                                        $wire.on('borrowing-modal-opened', () => {
+                                            $(this.$refs.studentSelect).val(null).trigger('change', { ignore: true });
+                                        });
+                                    }
+                                }, 50);
+                            }
+                        }" wire:ignore>
+                            <flux:label>Siswa Peminjam <span class="text-red-500 ml-1">*</span></flux:label>
+                            <select x-ref="studentSelect" class="w-full rounded-md border-zinc-200">
+                                <option value="">Pilih Siswa...</option>
+                                @foreach($students as $s)
+                                    <option value="{{ $s->id }}">{{ $s->nis }} - {{ $s->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <flux:error name="student_id" />
+                    </flux:field>
 
-                    <div x-data="{ 
-                        bookId: @entangle('book_id'),
-                        init() {
-                            let check = setInterval(() => {
-                                if (window.$ && window.$.fn.select2) {
-                                    clearInterval(check);
-                                    $(this.$refs.bookSelect).select2({ width: '100%', dropdownParent: $('#borrowingModalBody') })
-                                        .on('change', (e) => { this.bookId = e.target.value; @this.setBorrowingBook(e.target.value); });
-                                    $wire.on('borrowing-modal-opened', () => {
-                                        $(this.$refs.bookSelect).val(null).trigger('change');
-                                    });
-                                }
-                            }, 50);
-                        }
-                    }" wire:ignore>
-                        <flux:label>Buku yang Dipinjam</flux:label>
-                        <select x-ref="bookSelect" class="w-full rounded-md border-zinc-200">
-                            <option value="">Pilih Buku...</option>
-                            @foreach($available_books as $b)
-                                <option value="{{ $b->id }}">{{ $b->title }} (Stok: {{ $b->available_stock }})</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <flux:field>
+                        <div x-data="{ 
+                            bookId: @entangle('book_id'),
+                            init() {
+                                let check = setInterval(() => {
+                                    if (window.$ && window.$.fn.select2) {
+                                        clearInterval(check);
+                                        $(this.$refs.bookSelect).select2({ width: '100%', dropdownParent: $('#borrowingModalBody') })
+                                            .on('change', (e, data) => { 
+                                                if (data && data.ignore) return;
+                                                this.bookId = e.target.value; 
+                                                @this.setBorrowingBook(e.target.value); 
+                                            });
+                                        $wire.on('borrowing-modal-opened', () => {
+                                            $(this.$refs.bookSelect).val(null).trigger('change', { ignore: true });
+                                        });
+                                    }
+                                }, 50);
+                            }
+                        }" wire:ignore>
+                            <flux:label>Buku yang Dipinjam <span class="text-red-500 ml-1">*</span></flux:label>
+                            <select x-ref="bookSelect" class="w-full rounded-md border-zinc-200">
+                                <option value="">Pilih Buku...</option>
+                                @foreach($available_books as $b)
+                                    <option value="{{ $b->id }}">{{ $b->title }} (Stok: {{ $b->available_stock }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <flux:error name="book_id" />
+                    </flux:field>
 
                     <div class="grid grid-cols-2 gap-6">
-                        <flux:input type="date" wire:model="borrow_date" label="Tanggal Pinjam" required />
-                        <flux:input type="date" wire:model="return_date" label="Batas Kembali" required />
+                        <flux:field>
+                            <flux:label>Tanggal Pinjam <span class="text-red-500 ml-1">*</span></flux:label>
+                            <flux:input type="date" wire:model.live="borrow_date" required />
+                            <flux:error name="borrow_date" />
+                        </flux:field>
+                        
+                        <flux:field>
+                            <flux:label>Batas Kembali <span class="text-red-500 ml-1">*</span></flux:label>
+                            <flux:input type="date" wire:model.live="return_date" required />
+                            <flux:error name="return_date" />
+                        </flux:field>
                     </div>
                     
                     <div class="flex justify-end gap-3 mt-8">

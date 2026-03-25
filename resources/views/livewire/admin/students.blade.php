@@ -148,22 +148,35 @@ new #[Layout('components.layouts.app')] #[Title('Data Siswa')] class extends Com
                 <h2 class="text-xl font-bold mb-4">{{ $studentId ? 'Edit Siswa' : 'Tambah Siswa' }}</h2>
                 <form wire:submit="save" class="space-y-6 mt-4">
                     <div class="grid grid-cols-2 gap-6">
-                        <flux:input wire:model="nis" label="NIS" required />
-                        <flux:input wire:model="class" label="Kelas" required />
+                        <flux:field>
+                            <flux:label>NIS <span class="text-red-500 ml-1">*</span></flux:label>
+                            <flux:input wire:model="nis" required />
+                        </flux:field>
+                        <flux:field>
+                            <flux:label>Kelas <span class="text-red-500 ml-1">*</span></flux:label>
+                            <flux:select wire:model="class" placeholder="Pilih Kelas..." required>
+                                <flux:select.option value="VII">VII</flux:select.option>
+                                <flux:select.option value="VIII">VIII</flux:select.option>
+                                <flux:select.option value="IX">IX</flux:select.option>
+                                <flux:select.option value="Lainnya">Lainnya</flux:select.option>
+                            </flux:select>
+                        </flux:field>
                     </div>
                     
-                    <flux:input wire:model="name" label="Nama Lengkap" required />
+                    <flux:field>
+                        <flux:label>Nama Lengkap <span class="text-red-500 ml-1">*</span></flux:label>
+                        <flux:input wire:model="name" required />
+                    </flux:field>
                     
-                    <div class="grid grid-cols-2 gap-6">
-                        <flux:input wire:model="phone" label="No Telepon/HP" />
-                        <div>
-                            <flux:label>Jenis Kelamin</flux:label>
-                            <div class="flex gap-4 mt-3">
-                                <label class="flex items-center gap-2"><input type="radio" wire:model="gender" value="L" class="border-zinc-300 rounded focus:ring-zinc-800"> Laki-laki</label>
-                                <label class="flex items-center gap-2"><input type="radio" wire:model="gender" value="P" class="border-zinc-300 rounded focus:ring-zinc-800"> Perempuan</label>
-                            </div>
+                    <flux:input wire:model="phone" label="No Telepon/HP" />
+                    
+                    <flux:field>
+                        <flux:label>Jenis Kelamin</flux:label>
+                        <div class="flex gap-4 mt-3">
+                            <label class="flex items-center gap-2"><input type="radio" wire:model="gender" value="L" class="border-zinc-300 rounded focus:ring-zinc-800"> Laki-laki</label>
+                            <label class="flex items-center gap-2"><input type="radio" wire:model="gender" value="P" class="border-zinc-300 rounded focus:ring-zinc-800"> Perempuan</label>
                         </div>
-                    </div>
+                    </flux:field>
                     
                     <flux:textarea wire:model="address" label="Alamat" rows="4" />
                     

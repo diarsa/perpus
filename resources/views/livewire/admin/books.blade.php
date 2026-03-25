@@ -293,7 +293,10 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                             </div>
                         </div>
                         <div class="col-span-3 space-y-6">
-                            <flux:input wire:model="title" label="Judul Buku" required />
+                            <flux:field>
+                                <flux:label>Judul Buku <span class="text-red-500 ml-1">*</span></flux:label>
+                                <flux:input wire:model="title" required />
+                            </flux:field>
                             
                             <!-- Penulis -->
                             <div style="position: relative; z-index: 999;">
@@ -414,7 +417,10 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <flux:input wire:model="published_year" type="number" label="Tahun" />
-                            <flux:input wire:model="stock" type="number" min="1" label="Stok" required />
+                            <flux:field>
+                                <flux:label>Stok <span class="text-red-500 ml-1">*</span></flux:label>
+                                <flux:input wire:model="stock" type="number" min="1" required />
+                            </flux:field>
                         </div>
                     </div>
                     
