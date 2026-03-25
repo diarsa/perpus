@@ -16,6 +16,7 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('profile', 'settings.profile')->name('settings.profile');
         Volt::route('password', 'settings.password')->name('settings.password');
         Volt::route('appearance', 'settings.appearance')->name('settings.appearance');
+        Volt::route('activity-log', 'settings.activity-log')->name('settings.activity-log');
     });
 
     Route::prefix('admin')->group(function () {

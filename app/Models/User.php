@@ -6,13 +6,15 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\UserActivity;
+use App\Traits\LogsActivity;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable // implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +48,28 @@ class User extends Authenticatable // implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the user's activities.
+     */
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class);
+    }
+
+    /**
+     * Log an activity for the user.
+     */
+    public function logActivity(string $type, string $description = null, array $properties = null)
+    {
+        return $this->activities()->create([
+            'type' => $type,
+            'description' => $description,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'properties' => $properties,
+        ]);
     }
 
     /**
