@@ -86,11 +86,51 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                     </div>
                 </div>
                 <div class="flex items-baseline gap-2">
-                    <h3 class="text-4xl font-black text-zinc-900 dark:text-zinc-100">{{ number_format($stats['total_books']) }}</h3>
+                    <h3 class="text-4xl font-black text-zinc-900 dark:text-zinc-100"
+                        x-data="{ count: 0, target: {{ (int)$stats['total_books'] }} }"
+                        x-init="
+                            $nextTick(() => {
+                                let duration = 1500;
+                                let startTime = null;
+                                const animate = (timestamp) => {
+                                    if (!startTime) startTime = timestamp;
+                                    let progress = Math.min((timestamp - startTime) / duration, 1);
+                                    let easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                                    count = Math.floor(easeOutQuart * target);
+                                    if (progress < 1) {
+                                        window.requestAnimationFrame(animate);
+                                    }
+                                };
+                                window.requestAnimationFrame(animate);
+                            })
+                        "
+                        x-text="count.toLocaleString()">
+                        {{ number_format($stats['total_books']) }}
+                    </h3>
                     <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Buku</span>
                 </div>
                 <div class="mt-4 flex items-center gap-2">
-                    <span class="text-[10px] font-bold text-zinc-400">{{ $stats['total_titles'] }} JUDUL TERSEDIA</span>
+                    <span class="text-[10px] font-bold text-zinc-400"
+                        x-data="{ count: 0, target: {{ (int)$stats['total_titles'] }} }"
+                        x-init="
+                            $nextTick(() => {
+                                let duration = 1500;
+                                let startTime = null;
+                                const animate = (timestamp) => {
+                                    if (!startTime) startTime = timestamp;
+                                    let progress = Math.min((timestamp - startTime) / duration, 1);
+                                    let easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                                    count = Math.floor(easeOutQuart * target);
+                                    if (progress < 1) {
+                                        window.requestAnimationFrame(animate);
+                                    }
+                                };
+                                window.requestAnimationFrame(animate);
+                            })
+                        "
+                        x-text="count.toLocaleString() + ' JUDUL TERSEDIA'">
+                        {{ $stats['total_titles'] }} JUDUL TERSEDIA
+                    </span>
                 </div>
             </div>
 
@@ -102,11 +142,31 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                     </div>
                 </div>
                 <div class="flex items-baseline gap-2">
-                    <h3 class="text-4xl font-black text-zinc-900 dark:text-zinc-100">{{ number_format($stats['active_borrowings']) }}</h3>
+                    <h3 class="text-4xl font-black text-zinc-900 dark:text-zinc-100"
+                        x-data="{ count: 0, target: {{ (int)$stats['active_borrowings'] }} }"
+                        x-init="
+                            $nextTick(() => {
+                                let duration = 1500;
+                                let startTime = null;
+                                const animate = (timestamp) => {
+                                    if (!startTime) startTime = timestamp;
+                                    let progress = Math.min((timestamp - startTime) / duration, 1);
+                                    let easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                                    count = Math.floor(easeOutQuart * target);
+                                    if (progress < 1) {
+                                        window.requestAnimationFrame(animate);
+                                    }
+                                };
+                                window.requestAnimationFrame(animate);
+                            })
+                        "
+                        x-text="count.toLocaleString()">
+                        {{ number_format($stats['active_borrowings']) }}
+                    </h3>
                     <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Siswa</span>
                 </div>
                 <div class="mt-4">
-                    <span class="text-[10px] font-black uppercase py-0.5 px-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-lg">Dipinjam</span>
+                    <span class="text-[10px] font-black uppercase py-0.5 px-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-lg">Meminjam</span>
                 </div>
             </div>
         </div>
@@ -121,7 +181,27 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                     </div>
                 </div>
                 <div class="flex items-baseline gap-2">
-                    <h3 class="text-4xl font-black text-zinc-900 dark:text-zinc-100">{{ number_format($stats['total_students']) }}</h3>
+                    <h3 class="text-4xl font-black text-zinc-900 dark:text-zinc-100"
+                        x-data="{ count: 0, target: {{ (int)$stats['total_students'] }} }"
+                        x-init="
+                            $nextTick(() => {
+                                let duration = 1500;
+                                let startTime = null;
+                                const animate = (timestamp) => {
+                                    if (!startTime) startTime = timestamp;
+                                    let progress = Math.min((timestamp - startTime) / duration, 1);
+                                    let easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                                    count = Math.floor(easeOutQuart * target);
+                                    if (progress < 1) {
+                                        window.requestAnimationFrame(animate);
+                                    }
+                                };
+                                window.requestAnimationFrame(animate);
+                            })
+                        "
+                        x-text="count.toLocaleString()">
+                        {{ number_format($stats['total_students']) }}
+                    </h3>
                     <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Terdaftar</span>
                 </div>
             </div>
@@ -134,7 +214,27 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                     </div>
                 </div>
                 <div class="flex items-baseline gap-2">
-                    <h3 class="text-4xl font-black text-red-600">{{ $stats['overdue_borrowings'] }}</h3>
+                    <h3 class="text-4xl font-black text-red-600"
+                        x-data="{ count: 0, target: {{ (int)$stats['overdue_borrowings'] }} }"
+                        x-init="
+                            $nextTick(() => {
+                                let duration = 1500;
+                                let startTime = null;
+                                const animate = (timestamp) => {
+                                    if (!startTime) startTime = timestamp;
+                                    let progress = Math.min((timestamp - startTime) / duration, 1);
+                                    let easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                                    count = Math.floor(easeOutQuart * target);
+                                    if (progress < 1) {
+                                        window.requestAnimationFrame(animate);
+                                    }
+                                };
+                                window.requestAnimationFrame(animate);
+                            })
+                        "
+                        x-text="count.toLocaleString()">
+                        {{ $stats['overdue_borrowings'] }}
+                    </h3>
                     <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Transaksi</span>
                 </div>
                 <div class="mt-4">
