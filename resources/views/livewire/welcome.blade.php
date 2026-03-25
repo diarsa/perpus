@@ -185,6 +185,20 @@ new #[Layout('components.layouts.guest')] class extends Component {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .product-author, .product-publisher {
+            font-size: 11px;
+            color: #757575;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .product-author i, .product-publisher i {
+            font-size: 10px;
+            opacity: 0.7;
+        }
     </style>
     <!-- Shopee-style Toast Notification -->
     <div 
@@ -334,9 +348,11 @@ new #[Layout('components.layouts.guest')] class extends Component {
                                     @endif
                                     
                                     <div class="product-info">
-                                        <div class="product-title">{{ $book->title }}</div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="product-price">Tersedia {{ $book->available_stock }}</div>
+                                        <div class="product-title fw-semibold">{{ $book->title }}</div>
+                                        <div class="product-author" title="{{ $book->author->name }}"><i class="fas fa-feather-alt text-primary opacity-75"></i> {{ $book->author->name }}</div>
+                                        <div class="product-publisher" title="{{ $book->publisher->name }}"><i class="fas fa-building opacity-50"></i> {{ $book->publisher->name }} ({{ $book->published_year }})</div>
+                                        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                                            <div class="product-price small" style="font-size: 12px; font-weight: 600;">{{ $book->available_stock }} Tersedia</div>
                                         </div>
                                         <div class="mt-3">
                                             @if($book->available_stock > 0)
@@ -559,51 +575,85 @@ new #[Layout('components.layouts.guest')] class extends Component {
         </div>
     </main>
 
-    <!-- Borrow Confirmation Modal -->
-    @if($showBorrowModal && $selectedBookItem)
-        <div class="modal fade show" style="display: block; background: rgba(0,0,0,0.5);" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content rounded-0 border-0 shadow-lg">
-                    <div class="modal-header border-bottom-0 pb-0">
-                        <h6 class="fw-bold shopee-text-orange mb-0 uppercase">Konfirmasi Peminjaman</h6>
-                        <button type="button" class="btn-close" wire:click="$set('showBorrowModal', false)"></button>
-                    </div>
-                    <div class="modal-body pt-3">
-                        <div class="d-flex mb-4 p-3 bg-light border rounded-1">
-                            <div class="me-3" style="width: 60px; height: 80px; background: #eee; flex-shrink: 0;">
-                                @if($selectedBookItem->cover_image)
-                                    <img src="{{ Storage::url($selectedBookItem->cover_image) }}" class="w-100 h-100 object-fit-cover shadow-sm" onerror="this.onerror=null; this.src='/noimg.svg';">
-                                @else
-                                    <div class="d-flex align-items-center justify-content-center h-100 text-light"><i class="fas fa-book"></i></div>
-                                @endif
-                            </div>
-                            <div class="min-w-0">
-                                <h6 class="fw-bold text-dark mb-1 truncate">{{ $selectedBookItem->title }}</h6>
-                                <p class="small text-muted mb-0">Penulis: {{ $selectedBookItem->author->name }}</p>
-                                <p class="small text-muted mb-0">Penerbit: {{ $selectedBookItem->publisher->name ?? '-' }}</p>
-                            </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="small fw-bold text-dark mb-2">Batas Tanggal Pengembalian</label>
-                            <input type="date" wire:model="returnDate" class="form-control rounded-0 p-3" min="{{ date('Y-m-d') }}">
-                            <div class="form-text small opacity-75">Siswa wajib mengembalikan buku pada atau sebelum tanggal ini.</div>
+    <!-- Borrow Confirmation Modal - Ultra Smooth Cinematic Version -->
+    <div 
+        x-data="{ open: @entangle('showBorrowModal') }" 
+        x-show="open" 
+        x-on:keydown.escape.window="open = false"
+        x-transition:enter="transition ease-in-out duration-1200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in-out duration-600"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        style="position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 9999; background: rgba(0,0,0,0.6); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: center; padding: 1rem;"
+        x-cloak
+    >
+        <!-- Modal Dialog -->
+        <div 
+            x-show="open"
+            x-transition:enter="transition transform ease-out duration-1200"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-24"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition transform ease-in duration-600"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-24"
+            @click.away="open = false"
+            class="bg-white shadow-2xl overflow-hidden"
+            style="position: relative; z-index: 10000; width: 95%; max-width: 480px; border-radius: 28px; margin: auto;"
+        >
+            @if($selectedBookItem)
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light">
+                    <h6 class="fw-bold shopee-text-orange mb-0 uppercase tracking-tight">Konfirmasi Peminjaman</h6>
+                    <button type="button" class="btn-close shadow-none" @click="open = false" style="font-size: 10px;"></button>
+                </div>
+                <div class="p-4">
+                    <div class="d-flex mb-4 p-3 bg-white border rounded-3 align-items-center shadow-sm">
+                        <div class="me-3 shadow-sm overflow-hidden" style="width: 70px; height: 100px; background: #f0f0f0; flex-shrink: 0; border-radius: 8px; border: 1px solid #eee;">
+                            @if($selectedBookItem->cover_image)
+                                <img src="{{ Storage::url($selectedBookItem->cover_image) }}" class="w-100 h-100 object-fit-cover" onerror="this.onerror=null; this.src='/noimg.svg';">
+                            @else
+                                <div class="d-flex align-items-center justify-content-center h-100 text-muted bg-light"><i class="fas fa-book fa-2x opacity-25"></i></div>
+                            @endif
+                        </div>
+                        <div class="min-w-0">
+                            <h5 class="fw-bold text-dark mb-1 text-truncate" style="font-size: 17px;">{{ $selectedBookItem->title }}</h5>
+                            <p class="small text-muted mb-1"><i class="fas fa-feather-alt me-1 text-primary opacity-50"></i> {{ $selectedBookItem->author->name }}</p>
+                            <p class="small text-muted mb-0"><i class="fas fa-building me-1 opacity-50"></i> {{ $selectedBookItem->publisher->name ?? '-' }} ({{ $selectedBookItem->published_year }})</p>
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 pt-0">
-                        <div class="row g-2 w-100">
-                            <div class="col-6">
-                                <button type="button" class="btn btn-outline-secondary w-100 rounded-0 py-2 border-0" wire:click="$set('showBorrowModal', false)">BATAL</button>
-                            </div>
-                            <div class="col-6">
-                                <button type="button" class="btn btn-shopee w-100 rounded-0 py-2" wire:click="confirmBorrow">KONFIRMASI PINJAM</button>
-                            </div>
+
+                    <div class="mb-4">
+                        <label class="small fw-bold text-dark mb-2 d-block text-uppercase tracking-wider" style="font-size: 10px;">Batas Tanggal Pengembalian</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="far fa-calendar-alt"></i></span>
+                            <input type="date" wire:model="returnDate" class="form-control border-start-0 ps-0 shadow-none p-2 fs-6" min="{{ date('Y-m-d') }}" style="border-radius: 0 8px 8px 0;">
+                        </div>
+                        <div class="bg-primary-subtle text-primary-emphasis p-3 rounded-2 mt-3 small border border-primary-subtle d-flex gap-2">
+                            <i class="fas fa-info-circle mt-1"></i>
+                            <span>Estimasi durasi pinjam adalah 7 hari. Mohon kembalikan tepat waktu untuk menghindari denda atau sanksi.</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 pt-2">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-light w-100 fw-bold small text-muted py-3 border-0" @click="open = false">BATAL</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-shopee w-100 fw-bold small py-3 px-0 d-flex align-items-center justify-content-center gap-2 shadow" style="background: linear-gradient(45deg, #ee4d2d, #ff6633); border: none;" wire:click="confirmBorrow">
+                                PINJAM SEKARANG <i class="fas fa-check-circle"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="p-5 text-center">
+                    <div class="spinner-border text-shopee" role="status"></div>
+                </div>
+            @endif
         </div>
-    @endif
+    </div>
 
     <footer class="bg-white pt-5 pb-3 border-top mt-5">
         <div class="container overflow-hidden">
