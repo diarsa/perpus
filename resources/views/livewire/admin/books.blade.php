@@ -125,8 +125,8 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
             $filename = $this->cover_image_file->hashName();
             $coverImagePath = 'book-covers/' . $filename;
             
-            // Store to public disk
-            Storage::disk('public')->put($coverImagePath, (string) $img->toJpeg(80));
+            // Store to S3 disk
+            Storage::disk('s3')->put($coverImagePath, (string) $img->toJpeg(80), 'public');
         }
 
         if ($this->bookId) {
