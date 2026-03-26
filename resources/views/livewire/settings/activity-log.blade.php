@@ -10,10 +10,26 @@ use Livewire\WithPagination;
 new #[Layout('components.layouts.app')] class extends Component {
     use WithPagination;
 
+    public $search = '';
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
     public function with()
     {
         return [
             'activities' => Auth::user()->activities()
+                ->when($this->search, function ($query) {
+                    $query->where(function ($q) {
+                        $q->where('type', 'like', '%' . $this->search . '%')
+                          ->orWhere('description', 'like', '%' . $this->search . '%')
+                          ->orWhere('ip_address', 'like', '%' . $this->search . '%')
+                          ->orWhere('user_agent', 'like', '%' . $this->search . '%')
+                          ->orWhere('properties', 'like', '%' . $this->search . '%');
+                    });
+                })
                 ->latest()
                 ->paginate(10),
         ];
@@ -24,6 +40,10 @@ new #[Layout('components.layouts.app')] class extends Component {
     @include('partials.settings-heading')
 
     <x-settings.layout heading="Log Aktivitas" subheading="Tinjau aktivitas login dan tindakan akun Anda">
+        <div class="mt-6">
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Cari aktivitas..." icon="magnifying-glass" class="max-w-md" autocomplete="off" />
+        </div>
+
         <div class="mt-6 space-y-4">
             @forelse ($activities as $activity)
                 <div class="flex items-start gap-4 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors">
@@ -128,7 +148,9 @@ new #[Layout('components.layouts.app')] class extends Component {
             @empty
                 <div class="py-12 text-center">
                     <flux:icon.clock class="size-12 mx-auto text-zinc-200 dark:text-zinc-800 mb-4" />
-                    <p class="text-sm text-zinc-500 font-medium">Belum ada aktivitas yang tercatat.</p>
+                    <p class="text-sm text-zinc-500 font-medium">
+                        {{ $search ? 'Tidak ada aktivitas yang sesuai dengan pencarian Anda.' : 'Belum ada aktivitas yang tercatat.' }}
+                    </p>
                 </div>
             @endforelse
 

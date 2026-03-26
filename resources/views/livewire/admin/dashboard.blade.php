@@ -40,7 +40,7 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-6 p-2 lg:p-4 transition-all duration-300">
+<div wire:poll.10s class="flex h-full w-full flex-1 flex-col gap-6 p-2 lg:p-4 transition-all duration-300">
     <div class="flex justify-between items-end">
         <div class="flex flex-col gap-1">
             <h1 class="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">DASHBOARD ADMIN</h1>

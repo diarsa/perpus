@@ -171,7 +171,14 @@ new #[Layout('components.layouts.guest')] class extends Component {
     }
 }; ?>
 
-<div x-data="{ showModal: @entangle('showBorrowModal') }">
+<div x-data="{ 
+    showModal: @entangle('showBorrowModal'),
+    init() {
+        $watch('$wire.activeTab', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+}">
     <style>
         .page-loading {
             opacity: 0.5;
@@ -266,7 +273,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
     <div class="shopee-orange d-none d-md-block">
         <div class="container nav-top d-flex justify-content-between fs-6">
             <div class="d-flex">
-                <a href="#">Portal Siswa</a>
+                <a href="{{ route('home') }}">Portal Siswa</a>
                 <a href="#">Bantuan</a>
             </div>
             <div class="d-flex">
@@ -288,7 +295,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
                 <!-- Logo -->
                 <div class="col-6 col-md-3 mb-3 mb-md-0 d-flex align-items-center" style="cursor: pointer;" wire:click="setTab('home')">
                     <i class="fas fa-shopping-bag fa-2xl me-2"></i>
-                    <h2 class="m-0 fw-bold h4">RumahBaca<br><small class="fs-6 opacity-75">SFOURTEM</small></h2>
+                    <h2 class="m-0 fw-bold h4">RumahBaca<br><small class="fs-5 opacity-75">SFOURTEM</small></h2>
                 </div>
                 
                 <!-- Search -->
@@ -532,7 +539,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
                             @forelse($myBorrowings as $borrow)
                                 <div class="bg-white border rounded shadow-sm mb-3">
                                     <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
-                                        <div class="fw-bold text-uppercase text-dark" style="font-size: 13px;">{{ $borrow->book->publisher->name ?? 'RumahBaca Sfourtem' }}</div>
+                                        <div class="fw-bold text-uppercase text-dark" style="font-size: 13px;">{{ $borrow->book->publisher->name ?? 'RumahBaca SFOURTEM' }}</div>
                                         <div class="shopee-text-orange small fw-bold text-uppercase">
                                             @php
                                                 $labels = [
@@ -688,7 +695,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
             </div>
             <hr class="my-4 opacity-5">
             <div class="text-center text-muted small">
-                &copy; {{ date('Y') }} RumahBaca Sfourtem. Seluas Pengetahuan, Semudah Sentuhan.
+                &copy; {{ date('Y') }} RumahBaca SFOURTEM. Seluas Pengetahuan, Semudah Sentuhan.
             </div>
         </div>
     </footer>
