@@ -208,7 +208,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl" x-data="{ deleteId: null, showConfirm: false }">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Data Buku</h1>
             <flux:button variant="primary" wire:click="create">Tambah Buku</flux:button>
@@ -252,7 +252,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                             <td class="px-6 py-4 text-center text-xs">{{ $book->stock }} ({{ $book->available_stock }})</td>
                             <td class="px-6 py-4 text-right">
                                 <flux:button size="sm" variant="outline" wire:click="edit({{ $book->id }})">Edit</flux:button>
-                                <flux:button size="sm" variant="danger" wire:click="$dispatch('showConfirmModal', { title: 'Hapus Buku', message: 'Anda yakin ingin menghapus buku ini secara permanen?', actionEvent: 'deleteBook', actionParams: [{{ $book->id }}] })">Hapus</flux:button>
+                                <flux:button size="sm" variant="danger" @click="deleteId = {{ $book->id }}; showConfirm = true">Hapus</flux:button>
                             </td>
                         </tr>
                     @empty
@@ -454,4 +454,12 @@ new #[Layout('components.layouts.app')] #[Title('Data Buku')] class extends Comp
                 </form>
             </div>
         </flux:modal>
+
+        <x-confirm-dialog 
+            title="Hapus Buku"
+            message="Anda yakin ingin menghapus buku ini secara permanen? Tindakan ini tidak dapat dibatalkan."
+            wireAction="delete(deleteId)"
+            variant="danger"
+            confirmText="Ya, Hapus"
+        />
     </div>

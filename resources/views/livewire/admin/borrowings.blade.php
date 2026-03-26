@@ -206,7 +206,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl" x-data="{ deleteId: null, showConfirm: false }">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Data Peminjaman</h1>
             <flux:button variant="primary" wire:click="create">Peminjaman Baru</flux:button>
@@ -245,7 +245,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                 </thead>
                 <tbody>
                     @forelse($borrowings as $borrow)
-                        <tr class="border-b dark:border-zinc-700 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 transition-colors">
+                        <tr wire:key="borrow-{{ $borrow->id }}" class="border-b dark:border-zinc-700 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 transition-colors">
                             <td class="px-6 py-4">
                                 <span class="font-medium text-zinc-900 dark:text-white">{{ $borrow->student->name }}</span> <br>
                                 <span class="text-xs text-zinc-500">NIS: {{ $borrow->student->nis }}</span>
@@ -298,8 +298,8 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                                             {{ $borrow->status == 'returning' ? 'Konfirmasi Kembali' : 'Kembalikan' }}
                                         </flux:button>
                                     @endif
-                                    
-                                    <flux:button size="sm" icon="trash" variant="ghost" wire:click="$dispatch('showConfirmModal', { title: 'Hapus Riwayat', message: 'Hapus data ini?', actionEvent: 'deleteBorrowing', actionParams: [{{ $borrow->id }}] })"></flux:button>
+
+                                    <flux:button size="sm" icon="trash" variant="ghost" @click="deleteId = {{ $borrow->id }}; showConfirm = true"></flux:button>
                                 </div>
                             </td>
                         </tr>
@@ -433,4 +433,14 @@ new #[Layout('components.layouts.app')] #[Title('Data Peminjaman')] class extend
                 </div>
             </div>
         </flux:modal>
+
+        {{-- Inline Delete Confirm Dialog --}}
+        <x-confirm-dialog 
+            title="Hapus Riwayat"
+            message="Anda yakin ingin menghapus riwayat peminjaman ini? Tindakan ini tidak dapat dibatalkan."
+            wireAction="delete(deleteId)"
+            variant="danger"
+            confirmText="Ya, Hapus"
+        />
+    </div>
 @endvolt

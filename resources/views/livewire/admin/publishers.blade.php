@@ -76,7 +76,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Penerbit')] class extends 
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl" x-data="{ deleteId: null, showConfirm: false }">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold">Data Penerbit</h1>
         <flux:button variant="primary" wire:click="create">Tambah Penerbit</flux:button>
@@ -104,7 +104,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Penerbit')] class extends 
                         <td class="px-6 py-4 text-center text-zinc-600 dark:text-zinc-400">{{ $publisher->books_count }} buku</td>
                         <td class="px-6 py-4 text-right">
                             <flux:button size="sm" variant="outline" wire:click="edit({{ $publisher->id }})">Edit</flux:button>
-                            <flux:button size="sm" variant="danger" wire:click="$dispatch('showConfirmModal', { title: 'Hapus Penerbit', message: 'Anda yakin ingin menghapus data penerbit ini secara permanen?', actionEvent: 'deletePublisher', actionParams: [{{ $publisher->id }}] })">Hapus</flux:button>
+                            <flux:button size="sm" variant="danger" @click="deleteId = {{ $publisher->id }}; showConfirm = true">Hapus</flux:button>
                         </td>
                     </tr>
                 @empty
@@ -133,4 +133,12 @@ new #[Layout('components.layouts.app')] #[Title('Data Penerbit')] class extends 
             </form>
         </div>
     </flux:modal>
+
+    <x-confirm-dialog 
+        title="Hapus Penerbit"
+        message="Anda yakin ingin menghapus data penerbit ini secara permanen? Tindakan ini tidak dapat dibatalkan."
+        wireAction="delete(deleteId)"
+        variant="danger"
+        confirmText="Ya, Hapus"
+    />
 </div>

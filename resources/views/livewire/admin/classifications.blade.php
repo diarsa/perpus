@@ -81,7 +81,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Klasifikasi')] class exten
     }
 }; ?>
 
-<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+<div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl" x-data="{ deleteId: null, showConfirm: false }">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold">Data Klasifikasi</h1>
         <flux:button variant="primary" wire:click="create">Tambah Klasifikasi</flux:button>
@@ -113,7 +113,7 @@ new #[Layout('components.layouts.app')] #[Title('Data Klasifikasi')] class exten
                         </td>
                         <td class="px-6 py-4 text-right space-x-2">
                             <flux:button size="sm" variant="outline" wire:click="edit({{ $classification->id }})">Edit</flux:button>
-                            <flux:button size="sm" variant="danger" wire:click="$dispatch('showConfirmModal', { title: 'Hapus Klasifikasi', message: 'Anda yakin ingin menghapus klasifikasi ini? Buku yang terhubung akan kehilangan tautan klasifikasinya.', actionEvent: 'deleteClassification', actionParams: [{{ $classification->id }}] })">Hapus</flux:button>
+                            <flux:button size="sm" variant="danger" @click="deleteId = {{ $classification->id }}; showConfirm = true">Hapus</flux:button>
                         </td>
                     </tr>
                 @empty
@@ -142,4 +142,12 @@ new #[Layout('components.layouts.app')] #[Title('Data Klasifikasi')] class exten
             </form>
         </div>
     </flux:modal>
+
+    <x-confirm-dialog 
+        title="Hapus Klasifikasi"
+        message="Anda yakin ingin menghapus klasifikasi ini? Buku yang terhubung akan kehilangan tautan klasifikasinya. Tindakan ini tidak dapat dibatalkan."
+        wireAction="delete(deleteId)"
+        variant="danger"
+        confirmText="Ya, Hapus"
+    />
 </div>
