@@ -31,13 +31,19 @@ new #[Layout('components.layouts.guest')] class extends Component {
     public function mount()
     {
         $this->sessionNis = session()->get('student_nis');
+
+        if ($this->sessionNis && ! Student::where('nis', $this->sessionNis)->exists()) {
+            session()->forget('student_nis');
+            $this->sessionNis = null;
+        }
+
         $this->returnDate = now()->addDays(7)->format('Y-m-d');
     }
 
     public function with()
     {
         $activeStudent = null;
-        $myBorrowings = [];
+        $myBorrowings = collect();
         if ($this->sessionNis) {
             $activeStudent = Student::where('nis', $this->sessionNis)->first();
             if ($activeStudent) {
@@ -278,7 +284,7 @@ new #[Layout('components.layouts.guest')] class extends Component {
             </div>
             <div class="d-flex">
                 @if($sessionNis)
-                    <a href="#" wire:click="setTab('account')"><i class="fas fa-user-circle me-1"></i> {{ $activeStudent->name }}</a>
+                    <a href="#" wire:click="setTab('account')"><i class="fas fa-user-circle me-1"></i> {{ $activeStudent?->name ?? 'Akun' }}</a>
                     <a href="#" wire:click="logout">Keluar</a>
                 @else
                     <a href="#" wire:click="setTab('register')">Daftar</a>

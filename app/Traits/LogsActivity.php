@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\UserActivity;
 use Illuminate\Support\Facades\Auth;
 
 trait LogsActivity
