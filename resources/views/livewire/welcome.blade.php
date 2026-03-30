@@ -382,8 +382,8 @@ new #[Layout('components.layouts.guest')] class extends Component {
                                     
                                     <div class="product-info">
                                         <div class="product-title fw-semibold">{{ $book->title }}</div>
-                                        <div class="product-author" title="{{ $book->author->name }}"><i class="fas fa-feather-alt text-primary opacity-75"></i> {{ $book->author->name }}</div>
-                                        <div class="product-publisher" title="{{ $book->publisher->name }}"><i class="fas fa-building opacity-50"></i> {{ $book->publisher->name }} ({{ $book->published_year }})</div>
+                                        <div class="product-author" title="{{ $book->author?->name ?? 'Penulis tidak diketahui' }}"><i class="fas fa-feather-alt text-primary opacity-75"></i> {{ $book->author?->name ?? 'Penulis tidak diketahui' }}</div>
+                                        <div class="product-publisher" title="{{ $book->publisher?->name ?? 'Penerbit tidak diketahui' }}"><i class="fas fa-building opacity-50"></i> {{ $book->publisher?->name ?? 'Penerbit tidak diketahui' }} ({{ $book->published_year }})</div>
                                         <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
                                             <div class="product-price small" style="font-size: 12px; font-weight: 600;">{{ $book->available_stock }} Tersedia</div>
                                         </div>
@@ -642,8 +642,8 @@ new #[Layout('components.layouts.guest')] class extends Component {
                         </div>
                         <div class="min-w-0">
                             <h5 class="fw-bold text-dark mb-1 text-truncate" style="font-size: 17px;">{{ $selectedBookItem->title }}</h5>
-                            <p class="small text-muted mb-1"><i class="fas fa-feather-alt me-1 text-primary opacity-50"></i> {{ $selectedBookItem->author->name }}</p>
-                            <p class="small text-muted mb-0"><i class="fas fa-building me-1 opacity-50"></i> {{ $selectedBookItem->publisher->name ?? '-' }} ({{ $selectedBookItem->published_year }})</p>
+                            <p class="small text-muted mb-1"><i class="fas fa-feather-alt me-1 text-primary opacity-50"></i> {{ $selectedBookItem->author?->name ?? 'Penulis tidak diketahui' }}</p>
+                            <p class="small text-muted mb-0"><i class="fas fa-building me-1 opacity-50"></i> {{ $selectedBookItem->publisher?->name ?? '-' }} ({{ $selectedBookItem->published_year }})</p>
                         </div>
                     </div>
 
